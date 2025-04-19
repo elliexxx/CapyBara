@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/easygamescreen"
+    tools:context="GamescreenEasy">
+
+    <GridLayout
+        android:id="@+id/cardGrid"
+        android:layout_width="304dp"
+        android:layout_height="399dp"
+        android:layout_margin="16dp"
+        android:alignmentMode="alignMargins"
+        android:columnCount="3"
+        android:rowCount="4"
+        android:useDefaultMargins="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.566">
+
+        <!-- 12 cards -->
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:clickable="true">
+
+            <ImageView
+                android:id="@+id/cardFront1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:baselineAlignBottom="false"
+                android:clickable="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/bisekelcard"
+                android:visibility="visible" />
+            <ImageView android:id="@+id/cardBack1" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/backcard" android:visibility="gone" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:clickable="true">
+
+            <ImageView
+                android:id="@+id/cardFront2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/card2"
+                android:visibility="visible" />
+            <ImageView android:id="@+id/cardBack2" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/backcard" android:visibility="gone" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:clickable="true">
+            <ImageView android:id="@+id/cardFront3" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/guitaristcard" android:visibility="visible" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+            <ImageView android:id="@+id/cardBack3" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/backcard" android:visibility="gone" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:clickable="true">
+            <ImageView android:id="@+id/cardFront4" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/card4" android:visibility="visible" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+            <ImageView android:id="@+id/cardBack4" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/backcard" android:visibility="gone" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:clickable="true">
+            <ImageView android:id="@+id/cardFront5" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/card5" android:visibility="visible" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+            <ImageView android:id="@+id/cardBack5" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/backcard" android:visibility="gone" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:clickable="true">
+            <ImageView android:id="@+id/cardFront6" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/card6" android:visibility="visible" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+            <ImageView android:id="@+id/cardBack6" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/backcard" android:visibility="gone" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:clickable="true">
+            <ImageView android:id="@+id/cardFront7" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/bisekelcard" android:visibility="visible" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+            <ImageView android:id="@+id/cardBack7" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/backcard" android:visibility="gone" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:clickable="true">
+            <ImageView android:id="@+id/cardFront8" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/card2" android:visibility="visible" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+            <ImageView android:id="@+id/cardBack8" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/backcard" android:visibility="gone" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:clickable="true">
+            <ImageView android:id="@+id/cardFront9" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/guitaristcard" android:visibility="visible" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+            <ImageView android:id="@+id/cardBack9" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/backcard" android:visibility="gone" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:clickable="true">
+            <ImageView android:id="@+id/cardFront10" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/card4" android:visibility="visible" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+            <ImageView android:id="@+id/cardBack10" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/backcard" android:visibility="gone" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:clickable="true">
+
+            <ImageView
+                android:id="@+id/cardFront11"
+                android:layout_width="match_parent"
+                android:layout_height="98dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/card5"
+                android:visibility="visible" />
+            <ImageView android:id="@+id/cardBack11" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/backcard" android:visibility="gone" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:clickable="true">
+            <ImageView android:id="@+id/cardFront12" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/card6" android:visibility="visible" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+            <ImageView android:id="@+id/cardBack12" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/backcard" android:visibility="gone" android:adjustViewBounds="true" android:scaleType="fitCenter" />
+        </FrameLayout>
+
+    </GridLayout>
+
+    <TextView
+        android:id="@+id/scoreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:text="0"
+        android:textColor="#3C3939"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.618"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.182" />
+
+    <TextView
+        android:id="@+id/timerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textColor="#3C3939"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.101"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.194"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/hintButton"
+        android:layout_width="65dp"
+        android:layout_height="36dp"
+        android:backgroundTint="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.094" />
+
+    <Button
+        android:id="@+id/pauseButton"
+        android:layout_width="77dp"
+        android:layout_height="50dp"
+        android:backgroundTint="@android:color/transparent"
+        android:textColor="@android:color/transparent"
+        android:textColorLink="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.158"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.096" />
+
+    <ImageView
+        android:id="@+id/imageView23"
+        android:layout_width="128dp"
+        android:layout_height="86dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/swimmingbara" />
+
+    <TextView
+        android:id="@+id/flipCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="0"
+        android:textColor="#000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.36"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.855" />
+
+    <Button
+        android:id="@+id/homeBTn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteX="200dp"
+        tools:layout_editor_absoluteY="60dp"
+        tools:ignore="MissingConstraints" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
