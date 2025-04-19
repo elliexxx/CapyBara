@@ -178,7 +178,7 @@ public class GamescreenEasy extends AppCompatActivity {
 //        }.start();
 
 //        newcomment
-        
+
         for (int i = 0; i < frontIds.length; i++) {
             ImageView front = findViewById(frontIds[i]);
             ImageView back = findViewById(backIds[i]);
@@ -223,15 +223,15 @@ public class GamescreenEasy extends AppCompatActivity {
         }
 
 // Start the game after 5 seconds
-        new Handler().postDelayed(() -> {
-            for (int i = 0; i < frontViews.size(); i++) {
-                frontViews.get(i).setVisibility(View.GONE);
-                backViews.get(i).setVisibility(View.VISIBLE);
-            }
-            // Start the timer after preview
-            startTimer();
-        }, 5000);
-        // 5000 milliseconds = 5 seconds
+//        new Handler().postDelayed(() -> {
+//            for (int i = 0; i < frontViews.size(); i++) {
+//                frontViews.get(i).setVisibility(View.GONE);
+//                backViews.get(i).setVisibility(View.VISIBLE);
+//            }
+//            // Start the timer after preview
+//            startTimer();
+//        }, 5000);
+//        // 5000 milliseconds = 5 seconds
 
         pauseButton.setOnClickListener(v -> togglePause());
 
@@ -296,25 +296,26 @@ public class GamescreenEasy extends AppCompatActivity {
     }
 
     private void startTimer() {
-        timeLeftInMillis = 30000; // 30 seconds
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
 
         countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 timeLeftInMillis = millisUntilFinished;
                 updateTimerText();
-                //updateScore();
             }
 
             @Override
             public void onFinish() {
                 if (matchedPairs < frontViews.size() / 2) {
-                    //updateScore();
-                    showGameOverPopup(); // Only show if not all matched
+                    showGameOverPopup();
                 }
             }
         }.start();
     }
+
 
     private void flipCard(int index) {
         ImageView front = frontViews.get(index);
@@ -370,15 +371,16 @@ public class GamescreenEasy extends AppCompatActivity {
         if (!isPaused) {
             isPaused = true;
             enableCards(false);
-            if (countDownTimer != null) countDownTimer.cancel();
-            pauseButton.setText("");
+            if (countDownTimer != null) countDownTimer.cancel(); // ✅ Stop the timer
+            pauseButton.setText(""); // or empty string/icon
         } else {
             isPaused = false;
             enableCards(true);
-            if (countDownTimer != null) startTimer();
-            pauseButton.setText("");
+            startTimer(); // ✅ Continue from remaining time
+            pauseButton.setText(""); // or empty string/icon
         }
     }
+
 
 
     @Override

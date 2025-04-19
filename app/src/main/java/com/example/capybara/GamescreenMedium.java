@@ -305,21 +305,21 @@ public class GamescreenMedium extends AppCompatActivity {
     }
 
     private void startTimer() {
-        timeLeftInMillis = 60000; // 30 seconds
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
 
         countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 timeLeftInMillis = millisUntilFinished;
                 updateTimerText();
-                //updateScore();
             }
 
             @Override
             public void onFinish() {
                 if (matchedPairs < frontViews.size() / 2) {
-                    //updateScore();
-                    showGameOverPopup(); // Only show if not all matched
+                    showGameOverPopup();
                 }
             }
         }.start();
@@ -379,15 +379,14 @@ public class GamescreenMedium extends AppCompatActivity {
         if (!isPaused) {
             isPaused = true;
             enableCards(false);
-            countDownTimer.cancel();
-            pauseButton.setText("");
+            if (countDownTimer != null) countDownTimer.cancel(); // ✅ Stop the timer
+            pauseButton.setText(""); // or empty string/icon
         } else {
             isPaused = false;
             enableCards(true);
-            startTimer();
-            pauseButton.setText("");
+            startTimer(); // ✅ Continue from remaining time
+            pauseButton.setText(""); // or empty string/icon
         }
-
     }
 
     @Override
