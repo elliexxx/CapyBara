@@ -123,6 +123,15 @@ public class GamescreenMedium extends AppCompatActivity {
         }
 
         congratsDialog.show();
+        Button homeBtn = congratsDialog.findViewById(R.id.homeBtn);
+        if (homeBtn != null) {
+            homeBtn.setOnClickListener(v -> {
+                Intent intent = new Intent(GamescreenMedium.this, MainmenuPage.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish(); // optional: closes the current game activity
+            });
+        }
     }
 
 

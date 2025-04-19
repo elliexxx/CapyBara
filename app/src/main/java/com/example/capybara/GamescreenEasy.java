@@ -117,6 +117,16 @@ public class GamescreenEasy extends AppCompatActivity {
         }
 
         congratsDialog.show();
+        Button homeBtn = congratsDialog.findViewById(R.id.homeBtn);
+        if (homeBtn != null) {
+            homeBtn.setOnClickListener(v -> {
+                Intent intent = new Intent(GamescreenEasy.this, MainmenuPage.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish(); // optional: closes the current game activity
+            });
+        }
+
     }
 
 
@@ -239,6 +249,7 @@ public class GamescreenEasy extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.show();
+
 
     }
 

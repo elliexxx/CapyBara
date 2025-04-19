@@ -20,7 +20,7 @@ public class ScoreDb extends SQLiteOpenHelper {
     public static final String COLUMN_SCORE = "score";
     public static final String COLUMN_TIMESTAMP = "timestamp";
 
-    public ScoreDb (Context context) {
+    public ScoreDb(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -40,14 +40,44 @@ public class ScoreDb extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    // ❌ FIXED insertScore: was inserting into wrong table
     public void insertScore(String username, int score) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("username", username);
-        values.put("score", score);
-        db.insert("scoreboard", null, values);
+        values.put(COLUMN_PLAYER_NAME, username);
+        values.put(COLUMN_SCORE, score);
+        db.insert(TABLE_NAME, null, values);
+        db.close();
     }
 
+    // ✅ NEW METHOD: insert or update only if score is higher
+    public void insertOrUpdateHighScore(String username, int score) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT MAX(" + COLUMN_SCORE + ") FROM " + TABLE_NAME + " WHERE " + COLUMN_PLAYER_NAME + " = ?", new String[]{username});
+        if (cursor.moveToFirst()) {
+            int currentHighScore = cursor.getInt(0);
+
+            if (score > currentHighScore) {
+                // Insert new high score
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_PLAYER_NAME, username);
+                values.put(COLUMN_SCORE, score);
+                db.insert(TABLE_NAME, null, values);
+            }
+        } else {
+            // First score entry for this player
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_PLAYER_NAME, username);
+            values.put(COLUMN_SCORE, score);
+            db.insert(TABLE_NAME, null, values);
+        }
+
+        cursor.close();
+        db.close();
+    }
+
+    // Get all scores (highest first)
     public List<Score> getAllScores() {
         List<Score> scoreList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -65,5 +95,4 @@ public class ScoreDb extends SQLiteOpenHelper {
         db.close();
         return scoreList;
     }
-
 }
