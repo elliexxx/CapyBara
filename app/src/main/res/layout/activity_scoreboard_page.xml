@@ -19,47 +19,51 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.005" />
+
     <TextView
         android:id="@+id/text_player_name"
+        android:layout_width="167dp"
+        android:layout_height="35dp"
         android:text="Player"
+        android:textColor="#333"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#333"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="36dp"
+        tools:layout_editor_absoluteY="320dp" />
+
 
     <TextView
         android:id="@+id/text_score"
-        android:text="Score: 0"
-        android:textSize="16sp"
-        android:textColor="#555"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        tools:ignore="MissingConstraints" />
+        android:layout_height="wrap_content"
+        android:text="Score: 0"
+        android:textColor="#555"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.582"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="145dp" />
 
     <TextView
         android:id="@+id/text_timestamp"
+        android:layout_width="217dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="120dp"
         android:text="2025-04-18 12:00"
-        android:textSize="14sp"
         android:textColor="#888"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        tools:ignore="MissingConstraints" />
-    <TextView
-        android:text="Scoreboard"
-        android:textSize="24sp"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        tools:ignore="MissingConstraints" />
-
-
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="330dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_scores"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="-37dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

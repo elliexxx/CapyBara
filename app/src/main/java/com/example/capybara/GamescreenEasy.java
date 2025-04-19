@@ -2,6 +2,8 @@ package com.example.capybara;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -91,26 +93,33 @@ public class GamescreenEasy extends AppCompatActivity {
     }
 
     private void showWinPopup() {
-        gameWon = true; // ✅ mark that game has been won
+        gameWon = true;
 
         if (countDownTimer != null) {
-            countDownTimer.cancel(); // ✅ cancel timer cleanly
-        }
-        Dialog congratsDialog = new Dialog(GamescreenEasy.this);
-        congratsDialog.setContentView(R.layout.popup_congratsuwon);
-        congratsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        congratsDialog.setCancelable(false);
-        congratsDialog.show();
-        matchedPairs++;
-        if (matchedPairs == frontViews.size() / 2) {
-            if (countDownTimer != null) {
-                countDownTimer.cancel(); // Stop the timer
-            }
-            showWinPopup();
-            ; // Show your winning popup
+            countDownTimer.cancel();
         }
 
+        int finalScore = calculateScore();
+
+        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String username = prefs.getString("username", "Player");
+
+        dbHelper.insertScore(username, finalScore);
+
+        Dialog congratsDialog = new Dialog(GamescreenEasy.this);
+        congratsDialog.setContentView(R.layout.popup_congratsuwon);
+        congratsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        congratsDialog.setCancelable(false);
+
+        TextView scoreText = congratsDialog.findViewById(R.id.scoreText);
+        if (scoreText != null) {
+            scoreText.setText("Score: " + finalScore);
+        }
+
+        congratsDialog.show();
     }
+
+
 
     private void updateTimerText() {
         int seconds = (int) (timeLeftInMillis / 1000);
@@ -162,22 +171,6 @@ public class GamescreenEasy extends AppCompatActivity {
         scoreTextView = findViewById(R.id.scoreTextView);
         dbHelper = new ScoreDb(this);
 
-//        countDownTimer = new CountDownTimer(30000, 1000) {
-//            @Override
-//            public void onTick(long millisUntilFinished) {
-//                int secondsLeft = (int) (millisUntilFinished / 1000);
-//                timerText.setText(secondsLeft + "s");
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                if (!gameWon) { // ✅ only show Game Over if the player hasn't already won
-//                    showGameOverPopup();
-//                }
-//            }
-//        }.start();
-
-//        newcomment
 
         for (int i = 0; i < frontIds.length; i++) {
             ImageView front = findViewById(frontIds[i]);
@@ -222,16 +215,6 @@ public class GamescreenEasy extends AppCompatActivity {
             backViews.get(i).setVisibility(View.GONE);
         }
 
-// Start the game after 5 seconds
-//        new Handler().postDelayed(() -> {
-//            for (int i = 0; i < frontViews.size(); i++) {
-//                frontViews.get(i).setVisibility(View.GONE);
-//                backViews.get(i).setVisibility(View.VISIBLE);
-//            }
-//            // Start the timer after preview
-//            startTimer();
-//        }, 5000);
-//        // 5000 milliseconds = 5 seconds
 
         pauseButton.setOnClickListener(v -> togglePause());
 
@@ -244,18 +227,6 @@ public class GamescreenEasy extends AppCompatActivity {
 
         enableCards(false);
     }
-
-
-//    private void updateScore() {
-//        // You can tweak this formula to balance difficulty.
-//        score = (timeRemaining * 10) - (flipCount * 2);
-//        if (score < 0) score = 0;
-//
-//        scoreTextView.setText(score);
-//
-//        dbHelper.insertScore(score, timeRemaining, flipCount);
-//
-//    }
 
 
     private void showGameOverPopup() {
@@ -379,6 +350,11 @@ public class GamescreenEasy extends AppCompatActivity {
             startTimer(); // ✅ Continue from remaining time
             pauseButton.setText(""); // or empty string/icon
         }
+    }
+    private int calculateScore() {
+        int timeBonus = (int) (timeLeftInMillis / 1000); // remaining seconds
+        int flipPenalty = flips;
+        return (timeBonus * 10) - (flipPenalty * 2); // example formula
     }
 
 

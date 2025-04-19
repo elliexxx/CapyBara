@@ -40,14 +40,14 @@ public class ScoreDb extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertScore(String playerName, int score) {
+    public void insertScore(String username, int score) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_PLAYER_NAME, playerName);
-        values.put(COLUMN_SCORE, score);
-        db.insert(TABLE_NAME, null, values);
-        db.close();
+        values.put("username", username);
+        values.put("score", score);
+        db.insert("scoreboard", null, values);
     }
+
     public List<Score> getAllScores() {
         List<Score> scoreList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();

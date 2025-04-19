@@ -3,6 +3,7 @@ package com.example.capybara;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -104,10 +105,23 @@ public class GamescreenHard extends AppCompatActivity {
             countDownTimer.cancel();
         }
 
+        int finalScore = calculateScore();
+
+        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String username = prefs.getString("username", "Player");
+
+        dbHelper.insertScore(username, finalScore);
+
         Dialog congratsDialog = new Dialog(GamescreenHard.this);
         congratsDialog.setContentView(R.layout.popup_congratsuwon);
-        congratsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        congratsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         congratsDialog.setCancelable(false);
+
+        TextView scoreText = congratsDialog.findViewById(R.id.scoreText);
+        if (scoreText != null) {
+            scoreText.setText("Score: " + finalScore);
+        }
+
         congratsDialog.show();
     }
 
@@ -180,8 +194,8 @@ public class GamescreenHard extends AppCompatActivity {
             if (i == 6 || i == 14) front.setTag("copy6");
             if (i == 7 || i == 9) front.setTag("copy7");
             if (i == 8 || i == 17) front.setTag("copy8");
-            if (i == 11 || i == 12) front.setTag("copy9");
-            if (i == 15 || i == 16) front.setTag("copy10");
+            if (i == 11 || i == 16) front.setTag("copy9");
+            if (i == 12 || i == 15) front.setTag("copy10");
 
             cardTags.put(front, (String) front.getTag());
 
@@ -357,7 +371,11 @@ public class GamescreenHard extends AppCompatActivity {
             pauseButton.setText(""); // or empty string/icon
         }
     }
-
+    private int calculateScore() {
+        int timeBonus = (int) (timeLeftInMillis / 1000); // remaining seconds
+        int flipPenalty = flips;
+        return (timeBonus * 10) - (flipPenalty * 2); // example formula
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

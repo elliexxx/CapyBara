@@ -3,6 +3,8 @@ package com.example.capybara;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -97,26 +99,32 @@ public class GamescreenMedium extends AppCompatActivity {
     }
 
     private void showWinPopup() {
-        gameWon = true; // ✅ mark that game has been won
+        gameWon = true;
 
         if (countDownTimer != null) {
-            countDownTimer.cancel(); // ✅ cancel timer cleanly
-        }
-        Dialog congratsDialog = new Dialog(GamescreenMedium.this);
-        congratsDialog.setContentView(R.layout.popup_congratsuwon);
-        congratsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        congratsDialog.setCancelable(false);
-        congratsDialog.show();
-        matchedPairs++;
-        if (matchedPairs == frontViews.size() / 2) {
-            if (countDownTimer != null) {
-                countDownTimer.cancel(); // Stop the timer
-            }
-            showWinPopup();
-            ; // Show your winning popup
+            countDownTimer.cancel();
         }
 
+        int finalScore = calculateScore();
+
+        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String username = prefs.getString("username", "Player");
+
+        dbHelper.insertScore(username, finalScore);
+
+        Dialog congratsDialog = new Dialog(GamescreenMedium.this);
+        congratsDialog.setContentView(R.layout.popup_congratsuwon);
+        congratsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        congratsDialog.setCancelable(false);
+
+        TextView scoreText = congratsDialog.findViewById(R.id.scoreText);
+        if (scoreText != null) {
+            scoreText.setText("Score: " + finalScore);
+        }
+
+        congratsDialog.show();
     }
+
 
     private void updateTimerText() {
         int seconds = (int) (timeLeftInMillis / 1000);
@@ -387,6 +395,12 @@ public class GamescreenMedium extends AppCompatActivity {
             startTimer(); // ✅ Continue from remaining time
             pauseButton.setText(""); // or empty string/icon
         }
+    }
+
+    private int calculateScore() {
+        int timeBonus = (int) (timeLeftInMillis / 1000); // remaining seconds
+        int flipPenalty = flips;
+        return (timeBonus * 10) - (flipPenalty * 2); // example formula
     }
 
     @Override
