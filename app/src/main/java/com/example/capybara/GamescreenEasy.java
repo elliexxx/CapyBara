@@ -177,6 +177,8 @@ public class GamescreenEasy extends AppCompatActivity {
 //            }
 //        }.start();
 
+//        newcomment
+        
         for (int i = 0; i < frontIds.length; i++) {
             ImageView front = findViewById(frontIds[i]);
             ImageView back = findViewById(backIds[i]);
@@ -377,7 +379,7 @@ public class GamescreenEasy extends AppCompatActivity {
             pauseButton.setText("");
         }
     }
-  
+
 
     @Override
     protected void onDestroy() {
