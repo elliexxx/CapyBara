@@ -82,15 +82,7 @@ public class GamescreenEasy extends AppCompatActivity {
             R.id.cardBack9, R.id.cardBack10, R.id.cardBack11, R.id.cardBack12
     };
 
-    private void flipCard(ImageView front, ImageView back) {
-        if (back.getVisibility() == View.VISIBLE) {
-            back.setVisibility(View.GONE);
-            front.setVisibility(View.VISIBLE);
-        } else {
-            front.setVisibility(View.GONE);
-            back.setVisibility(View.VISIBLE);
-        }
-    }
+
 
     private void showWinPopup() {
         gameWon = true;
@@ -116,17 +108,29 @@ public class GamescreenEasy extends AppCompatActivity {
             scoreText.setText("Score: " + finalScore);
         }
 
-        congratsDialog.show();
+        // ✅ Home button logic
         Button homeBtn = congratsDialog.findViewById(R.id.homeBtn);
         if (homeBtn != null) {
             homeBtn.setOnClickListener(v -> {
                 Intent intent = new Intent(GamescreenEasy.this, MainmenuPage.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish(); // optional: closes the current game activity
+                finish();
             });
         }
 
+        // ✅ Reset button logic
+        Button resetBtn = congratsDialog.findViewById(R.id.resetButton); // Make sure this ID exists in popup_congratsuwon.xml
+        if (resetBtn != null) {
+            resetBtn.setOnClickListener(v -> {
+                Intent intent = new Intent(GamescreenEasy.this, GamescreenEasy.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish(); // closes current game activity
+            });
+        }
+
+        congratsDialog.show();
     }
 
 
@@ -136,6 +140,7 @@ public class GamescreenEasy extends AppCompatActivity {
         timerText.setText(String.valueOf(seconds));
     }
 
+    private Map<Integer, String> imageIdToTag = new HashMap<>();
 
     private void checkMatch(int secondIndex) {
         String tag1 = cardTags.get(firstFlipped);
@@ -182,43 +187,38 @@ public class GamescreenEasy extends AppCompatActivity {
         dbHelper = new ScoreDb(this);
 
 
+        for (int i = 0; i < frontViews.size(); i++) {
+            ImageView front = frontViews.get(i);
+            int resId = imageResIds.get(i);
+            front.setImageResource(resId);
+
+            String tag = imageIdToTag.get(resId);
+            cardTags.put(front, tag); // ✅ dynamic tagging
+        }
+        imageIdToTag.put(R.drawable.bisekelcard, "bisekel");
+        imageIdToTag.put(R.drawable.card2, "card2");
+        imageIdToTag.put(R.drawable.guitaristcard, "guitarist");
+        imageIdToTag.put(R.drawable.card4, "card4");
+        imageIdToTag.put(R.drawable.card5, "card5");
+        imageIdToTag.put(R.drawable.card6, "card6");
+// Initialize card views
         for (int i = 0; i < frontIds.length; i++) {
             ImageView front = findViewById(frontIds[i]);
             ImageView back = findViewById(backIds[i]);
+
             frontViews.add(front);
             backViews.add(back);
 
-            // Tag the front with a match ID (e.g. by filename)
-            // These should be structured by real match logic
-            if (i == 0 || i == 6) cardTags.put(front, "bisekel");
-            if (i == 1 || i == 7) cardTags.put(front, "card2");
-            if (i == 2 || i == 8) cardTags.put(front, "guitarist");
-            if (i == 3 || i == 9) cardTags.put(front, "card4");
-            if (i == 4 || i == 10) cardTags.put(front, "card5");
-            if (i == 5 || i == 11) cardTags.put(front, "card6");
-
             final int index = i;
-
             back.setOnClickListener(v -> {
-                if (firstFlipped != null && secondFlipped != null) return; // prevent 3rd flip
-
-                ImageView frontCard = frontViews.get(index);
-                flipCard(frontCard, back);
-
+                if (isBusy || isPaused || front.getVisibility() == View.VISIBLE) return;
+                flipCard(index);
                 flips++;
                 flipCounterTextView.setText(String.valueOf(flips));
-
-                if (firstFlipped == null) {
-                    firstFlipped = frontCard;
-                } else {
-                    secondFlipped = frontCard;
-
-                    // Delay check to allow 2nd card to flip visually
-                    new Handler().postDelayed(() -> checkMatch(index), 500);
-                }
             });
-
         }
+
+        setupCards();
         // Show all front cards for preview
         for (int i = 0; i < frontViews.size(); i++) {
             frontViews.get(i).setVisibility(View.VISIBLE);
@@ -255,27 +255,27 @@ public class GamescreenEasy extends AppCompatActivity {
 
     private void setupCards() {
         imageResIds.clear();
+
         for (int resId : imageDrawables) {
             imageResIds.add(resId);
         }
-        Collections.shuffle(imageResIds);
+
+        Collections.shuffle(imageResIds); // ✅ This is what makes it random
 
         for (int i = 0; i < frontViews.size(); i++) {
             frontViews.get(i).setImageResource(imageResIds.get(i));
-            int index = i;
-            backViews.get(i).setOnClickListener(v -> {
-                if (isPaused || isBusy) return;
-
-                flipCount++;
-                flipCounterTextView.setText("Flips: " + flipCount);
-              //  updateScore();
-
-
-                flipCard(index);
-            });
-
         }
+
+        // Clear any previous flipped/matched states
+        firstFlipped = null;
+        secondFlipped = null;
+        matchedPairs = 0;
+        flips = 0;
+        flipCounterTextView.setText("0");
+
+        hideAllFronts(); // Reset views: show backs
     }
+
 
     private void startTimer() {
         if (countDownTimer != null) {
@@ -311,10 +311,20 @@ public class GamescreenEasy extends AppCompatActivity {
             firstCardBack = back;
         } else {
             isBusy = true;
-            if (firstCardFront.getDrawable().getConstantState().equals(front.getDrawable().getConstantState())) {
+
+            boolean isMatch = firstCardFront.getDrawable().getConstantState()
+                    .equals(front.getDrawable().getConstantState());
+
+            if (isMatch) {
+                matchedPairs++;
                 firstCardFront = null;
                 firstCardBack = null;
                 isBusy = false;
+
+                if (matchedPairs == totalPairs) {
+                    showWinPopup(); // 🎉 Show the popup when all matched
+                }
+
             } else {
                 Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
                 handler.postDelayed(() -> {
@@ -333,6 +343,7 @@ public class GamescreenEasy extends AppCompatActivity {
             }
         }
     }
+
 
     private void hideAllFronts() {
         for (ImageView front : frontViews) {

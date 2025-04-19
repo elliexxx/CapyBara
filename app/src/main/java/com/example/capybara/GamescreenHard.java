@@ -62,6 +62,7 @@ public class GamescreenHard extends AppCompatActivity {
     private ImageView firstCardBack = null;
 
     private Handler handler = new Handler();
+    private Map<Integer, String> imageIdToTag = new HashMap<>();
 
     private int[] imageDrawables = {
             R.drawable.copy1, R.drawable.copy3, R.drawable.copy1, R.drawable.copy2,
@@ -122,18 +123,32 @@ public class GamescreenHard extends AppCompatActivity {
             scoreText.setText("Score: " + finalScore);
         }
 
-        congratsDialog.show();
+        // ✅ Home button logic
         Button homeBtn = congratsDialog.findViewById(R.id.homeBtn);
         if (homeBtn != null) {
             homeBtn.setOnClickListener(v -> {
                 Intent intent = new Intent(GamescreenHard.this, MainmenuPage.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish(); // optional: closes the current game activity
+                finish();
             });
         }
 
+        // ✅ Reset button logic
+        Button resetBtn = congratsDialog.findViewById(R.id.resetButton); // Make sure this ID exists in popup_congratsuwon.xml
+        if (resetBtn != null) {
+            resetBtn.setOnClickListener(v -> {
+                Intent intent = new Intent(GamescreenHard.this, GamescreenHard.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish(); // closes current game activity
+            });
+        }
+
+        congratsDialog.show();
     }
+
+
 
 
     private void updateTimerText() {
@@ -188,52 +203,50 @@ public class GamescreenHard extends AppCompatActivity {
         dbHelper = new ScoreDb(this);
 
 
+        for (int i = 0; i < frontViews.size(); i++) {
+            ImageView front = frontViews.get(i);
+            int resId = imageResIds.get(i);
+            front.setImageResource(resId);
+
+            String tag = imageIdToTag.get(resId);
+            cardTags.put(front, tag); // ✅ dynamic tagging
+        }
+            // Tag the front with a match ID (e.g. by filename)
+            // These should be structured by real match logic
+            imageIdToTag.put(R.drawable.copy1, "copy1");
+            imageIdToTag.put(R.drawable.copy2, "copy2");
+            imageIdToTag.put(R.drawable.copy3, "copy3");
+            imageIdToTag.put(R.drawable.copy4, "copy4");
+            imageIdToTag.put(R.drawable.copy5, "copy5");
+            imageIdToTag.put(R.drawable.copy6, "copy6");
+            imageIdToTag.put(R.drawable.copy7, "copy7");
+            imageIdToTag.put(R.drawable.copy8, "copy8");
+            imageIdToTag.put(R.drawable.copy9, "copy9");
+            imageIdToTag.put(R.drawable.copy10, "copy10");
+
         for (int i = 0; i < frontIds.length; i++) {
             ImageView front = findViewById(frontIds[i]);
             ImageView back = findViewById(backIds[i]);
+
             frontViews.add(front);
             backViews.add(back);
 
-            // Tag the front with a match ID (e.g. by filename)
-            // These should be structured by real match logic
-            if (i == 0 || i == 2) front.setTag("copy1");
-            if (i == 1 || i == 13) front.setTag("copy2");
-            if (i == 3 || i == 18) front.setTag("copy3");
-            if (i == 4 || i == 10) front.setTag("copy4");
-            if (i == 5 || i == 19) front.setTag("copy5");
-            if (i == 6 || i == 14) front.setTag("copy6");
-            if (i == 7 || i == 9) front.setTag("copy7");
-            if (i == 8 || i == 17) front.setTag("copy8");
-            if (i == 11 || i == 16) front.setTag("copy9");
-            if (i == 12 || i == 15) front.setTag("copy10");
-
-            cardTags.put(front, (String) front.getTag());
-
             final int index = i;
             back.setOnClickListener(v -> {
-                if (firstFlipped != null && secondFlipped != null) return; // prevent 3rd flip
-                ImageView frontCard = frontViews.get(index);
-                flipCard(frontCard, back);
-
+                if (isBusy || isPaused || front.getVisibility() == View.VISIBLE) return;
+                flipCard(index);
                 flips++;
                 flipCounterTextView.setText(String.valueOf(flips));
-
-                if (firstFlipped == null) {
-                    firstFlipped = frontCard;
-                } else {
-                    secondFlipped = frontCard;
-
-                    // Delay check to allow 2nd card to flip visually
-                    new Handler().postDelayed(() -> checkMatch(index), 500);
-                }
             });
-
         }
+
+        setupCards();
         // Show all front cards for preview
         for (int i = 0; i < frontViews.size(); i++) {
             frontViews.get(i).setVisibility(View.VISIBLE);
             backViews.get(i).setVisibility(View.GONE);
         }
+
 
         pauseButton.setOnClickListener(v -> togglePause());
 
@@ -257,6 +270,28 @@ public class GamescreenHard extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.show();
+    }
+    private void setupCards() {
+        imageResIds.clear();
+
+        for (int resId : imageDrawables) {
+            imageResIds.add(resId);
+        }
+
+        Collections.shuffle(imageResIds); // ✅ This is what makes it random
+
+        for (int i = 0; i < frontViews.size(); i++) {
+            frontViews.get(i).setImageResource(imageResIds.get(i));
+        }
+
+        // Clear any previous flipped/matched states
+        firstFlipped = null;
+        secondFlipped = null;
+        matchedPairs = 0;
+        flips = 0;
+        flipCounterTextView.setText("0");
+
+        hideAllFronts(); // Reset views: show backs
     }
 
 //    private void setupCards() {
@@ -304,8 +339,6 @@ public class GamescreenHard extends AppCompatActivity {
     }
 
     private void flipCard(int index) {
-        if (isBusy) return;
-
         ImageView front = frontViews.get(index);
         ImageView back = backViews.get(index);
 
@@ -318,21 +351,20 @@ public class GamescreenHard extends AppCompatActivity {
         } else {
             isBusy = true;
 
-            String tag1 = (String) firstCardFront.getTag();
-            String tag2 = (String) front.getTag();
+            boolean isMatch = firstCardFront.getDrawable().getConstantState()
+                    .equals(front.getDrawable().getConstantState());
 
-            if (tag1 != null && tag1.equals(tag2)) {
-                // ✅ It's a match! Leave cards visible and unclickable
-                front.setClickable(false);
-                firstCardFront.setClickable(false);
-
-                matchedPairs++; // Optional: increment score here
-
+            if (isMatch) {
+                matchedPairs++;
                 firstCardFront = null;
                 firstCardBack = null;
                 isBusy = false;
+
+                if (matchedPairs == totalPairs) {
+                    showWinPopup(); // 🎉 Show the popup when all matched
+                }
+
             } else {
-                // ❌ Not a match: flip both back after delay
                 Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
                 handler.postDelayed(() -> {
                     front.setVisibility(View.INVISIBLE);
@@ -350,6 +382,7 @@ public class GamescreenHard extends AppCompatActivity {
             }
         }
     }
+
 
 
     private void hideAllFronts() {

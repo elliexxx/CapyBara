@@ -39,4 +39,17 @@
         android:layout_marginBottom="61dp"
         android:backgroundTint="#00FFFFFF" />
 
+    <Button
+        android:id="@+id/resetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        android:layout_gravity="center"
+        android:layout_marginTop="120dp"
+        android:focusable="true"
+        android:clickable="true"
+        android:textColor="@android:color/white"/>
+
+
+
 </RelativeLayout>
