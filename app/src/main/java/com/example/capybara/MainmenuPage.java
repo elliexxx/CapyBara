@@ -2,11 +2,15 @@ package com.example.capybara;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +20,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainmenuPage extends AppCompatActivity {
 
-    Button mediumButton, hardButton, playButton, scoreboardButton, societyButton, logoutButton, quitButton;
+    Button playButton, scoreboardButton, societyButton, logoutButton, quitButton;
+    Dialog popupDifficulty;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -31,46 +36,27 @@ public class MainmenuPage extends AppCompatActivity {
             return insets;
         });
 
-        // Connect buttons to XML
-        mediumButton = findViewById(R.id.medium);
-        hardButton = findViewById(R.id.hard);
-        playButton = findViewById(R.id.playButton); // Replace with your actual button ID
+        // Connect buttons
+        playButton = findViewById(R.id.playButton);
         scoreboardButton = findViewById(R.id.scoreboardButton);
         societyButton = findViewById(R.id.societyButton);
         logoutButton = findViewById(R.id.logoutButton);
         quitButton = findViewById(R.id.quitButton);
 
-        //medium samp
-        mediumButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainmenuPage.this, GamescreenMedium.class);
-            startActivity(intent);
-        });
+        // PLAY button shows difficulty popup
+        playButton.setOnClickListener(v -> showDifficultyPopup());
 
-        //hard samp
-        hardButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainmenuPage.this, GamescreenHard.class);
-            startActivity(intent);
-        });
-
-        // PLAY button
-        playButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainmenuPage.this, GamescreenEasy.class);
-            startActivity(intent);
-        });
-
-        // SCOREBOARD button
+        // SCOREBOARD
         scoreboardButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainmenuPage.this, Scoreboard_Page.class);
-            startActivity(intent);
+            startActivity(new Intent(MainmenuPage.this, Scoreboard_Page.class));
         });
 
-        // CAPYBARA SOCIETY button
+        // CAPYBARA SOCIETY
         societyButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainmenuPage.this, CapybarasocietyPage.class);
-            startActivity(intent);
+            startActivity(new Intent(MainmenuPage.this, CapybarasocietyPage.class));
         });
 
-        // LOGOUT button with confirmation
+        // LOGOUT
         logoutButton.setOnClickListener(v -> {
             new AlertDialog.Builder(MainmenuPage.this)
                     .setTitle("Log Out")
@@ -84,16 +70,44 @@ public class MainmenuPage extends AppCompatActivity {
                     .show();
         });
 
-        // QUIT button with confirmation
+        // QUIT
         quitButton.setOnClickListener(v -> {
             new AlertDialog.Builder(MainmenuPage.this)
                     .setTitle("Quit Game")
                     .setMessage("Are you sure you want to quit?")
-                    .setPositiveButton("Yes", (dialog, which) -> {
-                        finishAffinity(); // closes the app
-                    })
+                    .setPositiveButton("Yes", (dialog, which) -> finishAffinity())
                     .setNegativeButton("Cancel", null)
                     .show();
         });
+    }
+
+    private void showDifficultyPopup() {
+        popupDifficulty = new Dialog(this);
+        popupDifficulty.setContentView(R.layout.popup_categories);
+        popupDifficulty.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        Button btnEasy = popupDifficulty.findViewById(R.id.easybtn);
+        Button btnMedium = popupDifficulty.findViewById(R.id.medbtn);
+        Button btnHard = popupDifficulty.findViewById(R.id.hrdbtn);
+        Button btnClose = popupDifficulty.findViewById(R.id.exitbtn);
+
+        btnEasy.setOnClickListener(v -> {
+            startActivity(new Intent(MainmenuPage.this, GamescreenEasy.class));
+            popupDifficulty.dismiss();
+        });
+
+        btnMedium.setOnClickListener(v -> {
+            startActivity(new Intent(MainmenuPage.this, GamescreenMedium.class));
+            popupDifficulty.dismiss();
+        });
+
+        btnHard.setOnClickListener(v -> {
+            startActivity(new Intent(MainmenuPage.this, GamescreenHard.class));
+            popupDifficulty.dismiss();
+        });
+
+        btnClose.setOnClickListener(v -> popupDifficulty.dismiss());
+
+        popupDifficulty.show();
     }
 }
