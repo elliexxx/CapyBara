@@ -58,7 +58,10 @@ public class LoginPage extends AppCompatActivity {
                 boolean isValid = dbHelper.validateUser(username, password);
                 if (isValid) {
                     Toast.makeText(LoginPage.this, "Login successful", Toast.LENGTH_SHORT).show();
+
+                    // ✅ Pass username to MainmenuPage
                     Intent intent = new Intent(LoginPage.this, MainmenuPage.class);
+                    intent.putExtra("USERNAME", username); // 👈 this line sends the username
                     startActivity(intent);
                     finish();
                 } else {
@@ -66,5 +69,6 @@ public class LoginPage extends AppCompatActivity {
                 }
             }
         });
+
     }
 }

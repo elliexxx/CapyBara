@@ -19,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainmenuPage extends AppCompatActivity {
+    public static final String EXTRA_USERNAME = "USERNAME";
 
     Button playButton, scoreboardButton, societyButton, logoutButton, quitButton;
     Dialog popupDifficulty;
@@ -48,14 +49,9 @@ public class MainmenuPage extends AppCompatActivity {
 
         // SCOREBOARD
         scoreboardButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainmenuPage.this, Scoreboard_Page.class);
-
-            // Get the username from intent and pass it along
-            String username = getIntent().getStringExtra("username");
-            intent.putExtra("username", username);
-
-            startActivity(intent);
+            startActivity(new Intent(MainmenuPage.this, Scoreboard_Page.class));
         });
+
 
 
         // CAPYBARA SOCIETY

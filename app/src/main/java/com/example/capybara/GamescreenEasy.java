@@ -70,6 +70,12 @@ public class GamescreenEasy extends AppCompatActivity {
 
     Button homebtn;
     Dialog qDialog;
+    public static final String EXTRA_USERNAME = "USERNAME";
+
+
+// Then when saving score:
+// or insertOrUpdateHighScore(username, score);
+
 
     private int[] imageDrawables = {
             R.drawable.bisekelcard, R.drawable.card2, R.drawable.guitaristcard,
@@ -185,6 +191,7 @@ public class GamescreenEasy extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gamescreen_easy);
+        String username = getIntent().getStringExtra(EXTRA_USERNAME);
 
         flipCounterTextView = findViewById(R.id.flipCounter);
         timerText = findViewById(R.id.timerText);
@@ -193,6 +200,9 @@ public class GamescreenEasy extends AppCompatActivity {
         homebtn.setOnClickListener(v -> showQuitPopup());
         scoreTextView = findViewById(R.id.scoreTextView);
         dbHelper = new ScoreDb(this);
+        // Declare and initialize scoreDb
+        ScoreDb scoreDb = new ScoreDb(this);
+
 
 
         for (int i = 0; i < frontViews.size(); i++) {
@@ -314,6 +324,8 @@ public class GamescreenEasy extends AppCompatActivity {
 
 
     private void flipCard(int index) {
+        ScoreDb scoreDb = new ScoreDb(this);
+        String username = getIntent().getStringExtra(EXTRA_USERNAME);
         ImageView front = frontViews.get(index);
         ImageView back = backViews.get(index);
 
@@ -336,6 +348,8 @@ public class GamescreenEasy extends AppCompatActivity {
                 isBusy = false;
 
                 if (matchedPairs == totalPairs) {
+                    int score = calculateScore(); // however you're computing score
+                    scoreDb.insertScore(username, score);
                     showWinPopup(); // 🎉 Show the popup when all matched
                 }
 

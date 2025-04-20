@@ -13,6 +13,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.55"
+        app:layout_constraintVertical_bias="0.551"
         app:srcCompat="@drawable/florabelle_popup" />
+
+    <Button
+        android:id="@+id/btnclose"
+        android:layout_width="86dp"
+        android:layout_height="57dp"
+        android:backgroundTint="#00FFFFFF"
+        app:iconTint="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.875"
+        app:layout_constraintStart_toStartOf="@id/imageView19"
+        app:layout_constraintTop_toTopOf="@id/imageView19"
+        app:layout_constraintVertical_bias="0.216" />
 </androidx.constraintlayout.widget.ConstraintLayout>

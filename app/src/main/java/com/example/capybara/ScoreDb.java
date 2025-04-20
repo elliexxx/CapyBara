@@ -101,7 +101,7 @@ public class ScoreDb extends SQLiteOpenHelper {
 
                     // Ensure that we got valid data before creating the Score object
                     if (username != null && !username.isEmpty()) {
-                        Score scoreItem = new Score(username, score); // Assuming Score constructor takes username, score, and timestamp
+                        Score scoreItem = new Score(username, score, timestamp); // Assuming Score constructor takes username, score, and timestamp
                         scoreList.add(scoreItem);
                     }
                 } while (cursor.moveToNext());
