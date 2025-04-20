@@ -9,13 +9,17 @@
     tools:context=".CapybarasocietyPage">
 
     <Button
-        android:id="@+id/button11"
+        android:id="@+id/homebutton"
         android:layout_width="73dp"
         android:layout_height="43dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@android:color/transparent"
+        android:background="#00FFFFFF"
+        android:backgroundTint="@android:color/holo_purple"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="344dp" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/button14"
@@ -60,10 +64,10 @@
         android:backgroundTint="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.049"
+        app:layout_constraintHorizontal_bias="0.051"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.793" />
+        app:layout_constraintVertical_bias="0.806" />
 
     <Button
         android:id="@+id/button18"

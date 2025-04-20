@@ -15,4 +15,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.534"
         app:srcCompat="@drawable/bubbatub_popup" />
+
+    <Button
+        android:id="@+id/btnclose"
+        android:layout_width="222dp"
+        android:layout_height="140dp"
+        android:background="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.72"
+        app:layout_constraintStart_toStartOf="@id/imageView17"
+        app:layout_constraintTop_toTopOf="@id/imageView17"
+        app:layout_constraintVertical_bias="0.169" />
 </androidx.constraintlayout.widget.ConstraintLayout>
