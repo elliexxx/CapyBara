@@ -62,6 +62,9 @@ public class GamescreenHard extends AppCompatActivity {
     private ImageView firstCardBack = null;
 
     private Handler handler = new Handler();
+
+    Button homebtn;
+    Dialog qDialog;
     private Map<Integer, String> imageIdToTag = new HashMap<>();
 
     private int[] imageDrawables = {
@@ -199,6 +202,8 @@ public class GamescreenHard extends AppCompatActivity {
         flipCounterTextView = findViewById(R.id.flipCounter);
         timerText = findViewById(R.id.timerText);
         pauseButton = findViewById(R.id.pauseButton);
+        homebtn = findViewById(R.id.homebtn);
+        homebtn.setOnClickListener(v -> showQuitPopup());
         scoreTextView = findViewById(R.id.scoreTextView);
         dbHelper = new ScoreDb(this);
 
@@ -400,6 +405,12 @@ public class GamescreenHard extends AppCompatActivity {
         }
     }
 
+    private int calculateScore() {
+        int timeBonus = (int) (timeLeftInMillis / 1000); // remaining seconds
+        int flipPenalty = flips;
+        return (timeBonus * 10) - (flipPenalty * 2); // example formula
+    }
+
     private void togglePause() {
         if (!isPaused) {
             isPaused = true;
@@ -413,11 +424,39 @@ public class GamescreenHard extends AppCompatActivity {
             pauseButton.setText(""); // or empty string/icon
         }
     }
-    private int calculateScore() {
-        int timeBonus = (int) (timeLeftInMillis / 1000); // remaining seconds
-        int flipPenalty = flips;
-        return (timeBonus * 10) - (flipPenalty * 2); // example formula
+    private void showQuitPopup() {
+        qDialog = new Dialog(GamescreenHard.this);
+        qDialog.setContentView(R.layout.popup_quitgame);
+        qDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        qDialog.setCancelable(false);
+
+        Button confirmBtn = qDialog.findViewById(R.id.confirmbtn);
+        Button cancelBtn = qDialog.findViewById(R.id.cancelbtn);
+
+        confirmBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(GamescreenHard.this, MainmenuPage.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+            qDialog.dismiss();
+        });
+
+        cancelBtn.setOnClickListener(v -> {
+            qDialog.dismiss();
+            // Resume game logic if paused
+            if (isPaused) {
+                togglePause();  // Unpause the game
+            }
+        });
+
+        // Pause the game when the dialog shows
+        if (!isPaused) {
+            togglePause(); // Pause the game
+        }
+
+        qDialog.show();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

@@ -1,29 +1,19 @@
 package com.example.capybara;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Scoreboard_Page extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ScoreAdapter adapter;
     private ScoreDb dbHelper;
+    private ExecutorService executorService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +23,27 @@ public class Scoreboard_Page extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_scores);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // Initialize the ScoreDb helper
         dbHelper = new ScoreDb(this);
-        List<Score> scores = dbHelper.getAllScores();
 
-        adapter = new ScoreAdapter(scores);
-        recyclerView.setAdapter(adapter);
+        // Initialize the ExecutorService
+        executorService = Executors.newSingleThreadExecutor();
+
+        // Fetch scores from the database in the background
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<Score> scores = dbHelper.getAllScores(); // Fetch scores in the background
+
+                // Update the RecyclerView on the main thread
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter = new ScoreAdapter(Scoreboard_Page.this, scores);
+                        recyclerView.setAdapter(adapter);
+                    }
+                });
+            }
+        });
     }
 }
-
-

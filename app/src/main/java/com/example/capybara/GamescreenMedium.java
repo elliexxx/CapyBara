@@ -62,6 +62,8 @@ public class GamescreenMedium extends AppCompatActivity {
     private ImageView firstCardBack = null;
 
     private Handler handler = new Handler();
+    Button homebtn;
+    Dialog qDialog;
 
     private int[] imageDrawables = {
             R.drawable.bisekelcard, R.drawable.card2, R.drawable.capy3, R.drawable.card4,
@@ -189,6 +191,8 @@ public class GamescreenMedium extends AppCompatActivity {
         flipCounterTextView = findViewById(R.id.flipCounter);
         timerText = findViewById(R.id.timerText);
         pauseButton = findViewById(R.id.pauseButton);
+        homebtn = findViewById(R.id.homebtn);
+        homebtn.setOnClickListener(v -> showQuitPopup());
         scoreTextView = findViewById(R.id.scoreTextView);
         dbHelper = new ScoreDb(this);
 
@@ -383,6 +387,11 @@ public class GamescreenMedium extends AppCompatActivity {
         }
     }
 
+    private int calculateScore() {
+        int timeBonus = (int) (timeLeftInMillis / 1000); // remaining seconds
+        int flipPenalty = flips;
+        return (timeBonus * 10) - (flipPenalty * 2); // example formula
+    }
     private void togglePause() {
         if (!isPaused) {
             isPaused = true;
@@ -396,13 +405,38 @@ public class GamescreenMedium extends AppCompatActivity {
             pauseButton.setText(""); // or empty string/icon
         }
     }
+    private void showQuitPopup() {
+        qDialog = new Dialog(GamescreenMedium.this);
+        qDialog.setContentView(R.layout.popup_quitgame);
+        qDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        qDialog.setCancelable(false);
 
-    private int calculateScore() {
-        int timeBonus = (int) (timeLeftInMillis / 1000); // remaining seconds
-        int flipPenalty = flips;
-        return (timeBonus * 10) - (flipPenalty * 2); // example formula
+        Button confirmBtn = qDialog.findViewById(R.id.confirmbtn);
+        Button cancelBtn = qDialog.findViewById(R.id.cancelbtn);
+
+        confirmBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(GamescreenMedium.this, MainmenuPage.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+            qDialog.dismiss();
+        });
+
+        cancelBtn.setOnClickListener(v -> {
+            qDialog.dismiss();
+            // Resume game logic if paused
+            if (isPaused) {
+                togglePause();  // Unpause the game
+            }
+        });
+
+        // Pause the game when the dialog shows
+        if (!isPaused) {
+            togglePause(); // Pause the game
+        }
+
+        qDialog.show();
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

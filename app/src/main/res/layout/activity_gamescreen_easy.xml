@@ -199,15 +199,18 @@
         app:layout_constraintVertical_bias="0.855" />
 
     <Button
-        android:id="@+id/homeBTn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="200dp"
-        tools:layout_editor_absoluteY="60dp"
+        android:id="@+id/homebtn"
+        android:layout_width="78dp"
+        android:layout_height="46dp"
+        android:backgroundTint="@android:color/transparent"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.984"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023"
         tools:ignore="MissingConstraints" />
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

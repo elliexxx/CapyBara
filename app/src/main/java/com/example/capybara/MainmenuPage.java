@@ -48,8 +48,15 @@ public class MainmenuPage extends AppCompatActivity {
 
         // SCOREBOARD
         scoreboardButton.setOnClickListener(v -> {
-            startActivity(new Intent(MainmenuPage.this, Scoreboard_Page.class));
+            Intent intent = new Intent(MainmenuPage.this, Scoreboard_Page.class);
+
+            // Get the username from intent and pass it along
+            String username = getIntent().getStringExtra("username");
+            intent.putExtra("username", username);
+
+            startActivity(intent);
         });
+
 
         // CAPYBARA SOCIETY
         societyButton.setOnClickListener(v -> {

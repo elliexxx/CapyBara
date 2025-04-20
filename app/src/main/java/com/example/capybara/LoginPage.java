@@ -1,7 +1,6 @@
 package com.example.capybara;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -33,10 +32,6 @@ public class LoginPage extends AppCompatActivity {
             return insets;
         });
 
-//        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-//        SharedPreferences.Editor editor = prefs.edit();
-//        editor.putString("username", enteredUsername); // enteredUsername from EditText
-//        editor.apply();
         // Initialize views
         backButton = findViewById(R.id.loginback);
         loginButton = findViewById(R.id.loginmainmenu);
@@ -72,5 +67,4 @@ public class LoginPage extends AppCompatActivity {
             }
         });
     }
-
 }

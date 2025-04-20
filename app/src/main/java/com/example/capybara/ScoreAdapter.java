@@ -1,6 +1,6 @@
+
 package com.example.capybara;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
 
     private List<Score> scoreList;
 
-    public ScoreAdapter(List<Score> scoreList) {
+    public ScoreAdapter(Scoreboard_Page scoreboardPage, List<Score> scoreList) {
         this.scoreList = scoreList;
     }
 
@@ -31,7 +31,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
         Score score = scoreList.get(position);
         holder.nameText.setText(score.getPlayerName());
         holder.scoreText.setText("Score: " + score.getScore());
-        holder.timestampText.setText(score.getTimestamp());
+//        holder.timestampText.setText(score.getTimestamp()); // ✅ set timestamp
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
             super(itemView);
             nameText = itemView.findViewById(R.id.text_player_name);
             scoreText = itemView.findViewById(R.id.text_score);
-            timestampText = itemView.findViewById(R.id.text_timestamp);
+//            timestampText = itemView.findViewById(R.id.text_timestamp);
         }
     }
 }
