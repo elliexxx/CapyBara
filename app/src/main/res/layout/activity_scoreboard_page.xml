@@ -13,9 +13,24 @@
         android:id="@+id/recycler_scores"
         android:layout_width="304dp"
         android:layout_height="273dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="364dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="376dp"
+        android:layout_marginEnd="55dp"
+        android:layout_marginBottom="82dp"
         android:background="@drawable/rounded_corner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/homebtn"
+        android:layout_width="122dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="4dp"
+        android:background="#00FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

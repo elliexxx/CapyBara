@@ -21,9 +21,12 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class GamescreenMedium extends AppCompatActivity {
@@ -62,6 +65,8 @@ public class GamescreenMedium extends AppCompatActivity {
     private ImageView firstCardBack = null;
 
     private Handler handler = new Handler();
+
+
     Button homebtn;
     Dialog qDialog;
 
@@ -99,11 +104,9 @@ public class GamescreenMedium extends AppCompatActivity {
         }
 
         int finalScore = calculateScore();
+        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String username = prefs.getString("username", "Player");
-
-        dbHelper.insertScore(username, finalScore);
+//        dbHelper.insertScore(finalScore, timestamp);
 
         Dialog congratsDialog = new Dialog(GamescreenMedium.this);
         congratsDialog.setContentView(R.layout.popup_congratsuwon);
@@ -274,10 +277,34 @@ public class GamescreenMedium extends AppCompatActivity {
         builder.setView(popupView);
         builder.setCancelable(false); // Cannot dismiss by tapping outside
 
-        AlertDialog dialog = builder.create();
+        // ✅ Access buttons from popupView, not AlertDialog class
+        Button homebtn = popupView.findViewById(R.id.homebtn);
+        Button resetBtn = popupView.findViewById(R.id.resetButton);
+
+        AlertDialog dialog = builder.create(); // create first before setting button actions
+
+        if (homebtn != null) {
+            homebtn.setOnClickListener(v -> {
+                dialog.dismiss();
+                Intent intent = new Intent(GamescreenMedium.this, MainmenuPage.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            });
+        }
+
+        if (resetBtn != null) {
+            resetBtn.setOnClickListener(v -> {
+                dialog.dismiss();
+                Intent intent = new Intent(GamescreenMedium.this, GamescreenMedium.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            });
+        }
+
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.show();
-
     }
 
     private void setupCards() {
@@ -327,6 +354,8 @@ public class GamescreenMedium extends AppCompatActivity {
     }
 
     private void flipCard(int index) {
+        ScoreDb scoreDb = new ScoreDb(this);
+        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
         ImageView front = frontViews.get(index);
         ImageView back = backViews.get(index);
 
@@ -349,6 +378,8 @@ public class GamescreenMedium extends AppCompatActivity {
                 isBusy = false;
 
                 if (matchedPairs == totalPairs) {
+                    int score = calculateScore(); // however you're computing score
+                    scoreDb.insertScore(score, timestamp);
                     showWinPopup(); // 🎉 Show the popup when all matched
                 }
 

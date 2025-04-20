@@ -1,21 +1,19 @@
 package com.example.capybara;
 
 public class Score {
-    private String playerName;
     private int score;
+    private String timestamp;
 
-
-    public Score(String playerName, int score, String timestamp) {
-        this.playerName = playerName;
+    public Score(int score, String timestamp) {
         this.score = score;
-    }
-
-    public String getPlayerName() {
-        return playerName;
+        this.timestamp = timestamp;
     }
 
     public int getScore() {
         return score;
+    }
 
+    public String getTimestamp() {
+        return timestamp;
     }
 }

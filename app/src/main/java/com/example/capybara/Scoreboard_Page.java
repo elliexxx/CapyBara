@@ -1,6 +1,10 @@
 package com.example.capybara;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,9 +43,18 @@ public class Scoreboard_Page extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter = new ScoreAdapter(Scoreboard_Page.this, scores);
+                        adapter = new ScoreAdapter(scores);
                         recyclerView.setAdapter(adapter);
                     }
+
+                });
+                // HOME button logic (homebtn)
+                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button homeButton = findViewById(R.id.homebtn);
+                homeButton.setOnClickListener(v -> {
+                    Intent intent = new Intent(Scoreboard_Page.this, MainmenuPage.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                    finish(); // Optional: closes current activity
                 });
             }
         });

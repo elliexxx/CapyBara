@@ -15,7 +15,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
 
     private List<Score> scoreList;
 
-    public ScoreAdapter(Scoreboard_Page scoreboardPage, List<Score> scoreList) {
+    public ScoreAdapter(List<Score> scoreList) {
         this.scoreList = scoreList;
     }
 
@@ -29,9 +29,8 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
     @Override
     public void onBindViewHolder(@NonNull ScoreViewHolder holder, int position) {
         Score score = scoreList.get(position);
-        holder.nameText.setText(score.getPlayerName());
         holder.scoreText.setText("Score: " + score.getScore());
-//        holder.timestampText.setText(score.getTimestamp()); // ✅ set timestamp
+        holder.timestampText.setText(score.getTimestamp());
     }
 
     @Override
@@ -40,13 +39,12 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
     }
 
     static class ScoreViewHolder extends RecyclerView.ViewHolder {
-        TextView nameText, scoreText, timestampText;
+        TextView scoreText, timestampText;
 
         public ScoreViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameText = itemView.findViewById(R.id.text_player_name);
             scoreText = itemView.findViewById(R.id.text_score);
-//            timestampText = itemView.findViewById(R.id.text_timestamp);
+            timestampText = itemView.findViewById(R.id.text_timestamp);
         }
     }
 }
